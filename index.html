@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>代码映射数仓建模汇总</title>
+  <style>
+    body { margin: 0; background: #f6f8fb; color: #172033; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    .page { max-width: 1080px; margin: 32px auto; padding: 0 24px 40px; }
+    .hero { background: linear-gradient(135deg, #173b7a, #2563eb); color: white; border-radius: 18px; padding: 30px 34px; box-shadow: 0 14px 36px rgba(37,99,235,.22); }
+    .hero h1 { margin: 0 0 10px; font-size: 30px; letter-spacing: .02em; }
+    .hero p { margin: 0; opacity: .9; line-height: 1.7; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 18px; }
+    .card { background: white; border: 1px solid #e5eaf3; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(18, 32, 56, .06); }
+    .card h2 { margin: 0 0 12px; font-size: 18px; color: #173b7a; }
+    .card h3 { margin: 16px 0 8px; font-size: 15px; color: #334155; }
+    .full { grid-column: 1 / -1; }
+    .flow { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; }
+    .node { flex: 1; min-width: 220px; border-radius: 14px; background: #eef4ff; border: 1px solid #cfe0ff; padding: 14px 16px; }
+    .node b { display: block; color: #1d4ed8; margin-bottom: 6px; }
+    .arrow { align-self: center; font-size: 22px; color: #64748b; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e8edf5; vertical-align: top; }
+    th { background: #f1f5fb; color: #334155; font-weight: 700; }
+    code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 6px; }
+    ul { margin: 8px 0 0 20px; padding: 0; line-height: 1.75; }
+    .pill { display: inline-block; padding: 4px 9px; border-radius: 999px; background: #e0f2fe; color: #075985; font-size: 12px; margin: 2px 4px 2px 0; }
+    .ok { color: #047857; font-weight: 700; }
+    .warn { color: #b45309; font-weight: 700; }
+    .muted { color: #64748b; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .arrow { display: none; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <h1>代码映射数仓建模汇总</h1>
+      <p>从源绑定 DWD 明细层出发，经过双源校验，生成去来源信息的 DWS CFI 统一代码映射表。</p>
+      <p class="mono">项目目录：/home/dsou/code_mapping_jydb_datayes_ab/</p>
+    </section>
+
+    <section class="card full" style="margin-top:18px;">
+      <h2>一、建模链路</h2>
+      <div class="flow">
+        <div class="node"><b>DWD 源绑定明细层</b>聚源：dwd_gildata_range_year<br/>通联：dwd_datayes_range_year<br/>保留源内 ID，便于追溯。</div>
+        <div class="arrow">→</div>
+        <div class="node"><b>双源校验层</b>统一字段后按拉链键比对，差异保留在 validation 结果中。</div>
+        <div class="arrow">→</div>
+        <div class="node"><b>DWS CFI 统一层</b>dws_cfi_range_year<br/>去来源、去源内 ID，仅保留下游消费字段。</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>二、源表构造简述</h2>
+        <p>聚源基于 <code>SecuMain + DZ_CodeChange + DZ_ListStatus</code> 构造代码拉链。</p>
+        <p>通联基于 <code>md_security + md_sec_chg + md_trade_cal</code> 构造同口径拉链，并将代码变更结束日转为右开区间边界。</p>
+      </div>
+
+      <div class="card">
+        <h2>三、区间语义</h2>
+        <p>所有拉链表统一采用：</p>
+        <p class="mono">[strart_date, stop_date)</p>
+        <ul>
+          <li><code>strart_date</code> 当天有效</li>
+          <li><code>stop_date</code> 当天不再有效</li>
+          <li><code>stop_date</code> 为空表示当前开口</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>四、子表拆分</h2>
+        <span class="pill">A股 / 沪深：a_share_secu_mapping_z</span>
+        <span class="pill">A股 / 北交：a_share_bjse_secu_mapping_z</span>
+        <span class="pill">B股 / 沪深：b_share_secu_mapping_z</span>
+        <p class="muted">类别和市场由表名表达，表内不再保留 exchange 字段。</p>
+      </div>
+    </section>
+
+    <section class="card full" style="margin-top:18px;">
+      <h2>五、DWD 源绑定明细层</h2>
+      <table>
+        <thead><tr><th>来源</th><th>测试库</th><th>字段</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>聚源 Gildata</td>
+            <td><code>dfs://user_dsou_dwd_gildata_range_year</code></td>
+            <td><code>cfi_prod_time, instrument, listed_date, delist_date, secucode, innercode, companycode, strart_date, stop_date</code></td>
+            <td>保留聚源交易代码、证券级 ID 和公司级 ID。</td>
+          </tr>
+          <tr>
+            <td>通联 Datayes</td>
+            <td><code>dfs://user_dsou_dwd_datayes_range_year</code></td>
+            <td><code>cfi_prod_time, instrument, listed_date, delist_date, ticker_symbol, security_id, party_id, strart_date, stop_date</code></td>
+            <td>保留通联交易代码、证券级 ID 和主体级 ID。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card full" style="margin-top:18px;">
+      <h2>六、DWS CFI 统一消费层</h2>
+      <p>目标测试库：<code>dfs://user_dsou_dws_cfi_range_year</code></p>
+      <p>统一字段：</p>
+      <p class="mono">cfi_prod_time, instrument, listed_date, delist_date, ticker, strart_date, stop_date</p>
+      <p>映射关系：</p>
+      <ul>
+        <li>聚源：<code>secucode → ticker</code>，去掉 <code>innercode/companycode</code></li>
+        <li>通联：<code>ticker_symbol → ticker</code>，去掉 <code>security_id/party_id</code></li>
+      </ul>
+      <p class="muted">当前 DWS CFI 默认使用通联明细层作为主源，聚源明细层用于校验和追溯。</p>
+    </section>
+
+    <section class="grid" style="margin-top:18px;">
+      <div class="card">
+        <h2>七、校验逻辑</h2>
+        <ul>
+          <li>字段完整性检查</li>
+          <li><code>strart_date</code> 非空</li>
+          <li><code>stop_date >= strart_date</code> 或为空</li>
+          <li>拉链行不重复</li>
+          <li>DDB 行数 = CSV 行数</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>八、双源校验</h2>
+        <p>两源统一后按以下键比对：</p>
+        <p class="mono">instrument + ticker + strart_date + stop_date</p>
+        <p>差异分为：<span class="pill">一致</span><span class="pill">聚源独有</span><span class="pill">通联独有</span></p>
+      </div>
+      <div class="card">
+        <h2>九、当前状态</h2>
+        <p><span class="ok">当前截面完全一致</span></p>
+        <p><span class="warn">历史拉链有少量差异</span>，保留在 validation 结果中，不进入 DWS 字段。</p>
+      </div>
+    </section>
+
+    <section class="card full" style="margin-top:18px;">
+      <h2>十、DWS CFI 写入结果</h2>
+      <table>
+        <thead><tr><th>表名</th><th>行数</th><th>instrument 数</th><th>ticker 数</th><th>空起点</th><th>负区间</th><th>开口区间</th></tr></thead>
+        <tbody>
+          <tr><td><code>a_share_secu_mapping_z</code></td><td>3897</td><td>3894</td><td>3895</td><td>0</td><td>0</td><td>3713</td></tr>
+          <tr><td><code>a_share_bjse_secu_mapping_z</code></td><td>571</td><td>323</td><td>571</td><td>0</td><td>0</td><td>319</td></tr>
+          <tr><td><code>b_share_secu_mapping_z</code></td><td>116</td><td>115</td><td>115</td><td>0</td><td>0</td><td>79</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card full" style="margin-top:18px;">
+      <h2>十一、关键脚本</h2>
+      <table>
+        <thead><tr><th>脚本</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><code>build_split_mapping_tables.py</code></td><td>生成聚源/通联 DWD 源绑定拆分表。</td></tr>
+          <tr><td><code>write_split_mapping_to_ddb.py</code></td><td>写入 DWD 源绑定表到 DolphinDB。</td></tr>
+          <tr><td><code>build_dws_cfi_mapping.py</code></td><td>从通联 DWD 生成 DWS CFI 统一表。</td></tr>
+          <tr><td><code>write_dws_cfi_mapping_to_ddb.py</code></td><td>写入 DWS CFI 到 DolphinDB。</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
