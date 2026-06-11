@@ -1,164 +1,840 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>代码映射数仓建模汇总</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="pandoc">
+  <link rel="icon" href="data:,">
+  <title>盘前涨跌停数据调研报告</title>
   <style>
-    body { margin: 0; background: #f6f8fb; color: #172033; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
-    .page { max-width: 1080px; margin: 32px auto; padding: 0 24px 40px; }
-    .hero { background: linear-gradient(135deg, #173b7a, #2563eb); color: white; border-radius: 18px; padding: 30px 34px; box-shadow: 0 14px 36px rgba(37,99,235,.22); }
-    .hero h1 { margin: 0 0 10px; font-size: 30px; letter-spacing: .02em; }
-    .hero p { margin: 0; opacity: .9; line-height: 1.7; }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 18px; }
-    .card { background: white; border: 1px solid #e5eaf3; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(18, 32, 56, .06); }
-    .card h2 { margin: 0 0 12px; font-size: 18px; color: #173b7a; }
-    .card h3 { margin: 16px 0 8px; font-size: 15px; color: #334155; }
-    .full { grid-column: 1 / -1; }
-    .flow { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; }
-    .node { flex: 1; min-width: 220px; border-radius: 14px; background: #eef4ff; border: 1px solid #cfe0ff; padding: 14px 16px; }
-    .node b { display: block; color: #1d4ed8; margin-bottom: 6px; }
-    .arrow { align-self: center; font-size: 22px; color: #64748b; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
-    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e8edf5; vertical-align: top; }
-    th { background: #f1f5fb; color: #334155; font-weight: 700; }
-    code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 6px; }
-    ul { margin: 8px 0 0 20px; padding: 0; line-height: 1.75; }
-    .pill { display: inline-block; padding: 4px 9px; border-radius: 999px; background: #e0f2fe; color: #075985; font-size: 12px; margin: 2px 4px 2px 0; }
-    .ok { color: #047857; font-weight: 700; }
-    .warn { color: #b45309; font-weight: 700; }
-    .muted { color: #64748b; }
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .arrow { display: none; } }
+
+:root {
+  color-scheme: light;
+  --paper: #f5f7f4;
+  --ink: #17201b;
+  --muted: #657168;
+  --line: #d7ddd6;
+  --soft-line: #e8ece6;
+  --panel: #ffffff;
+  --panel-soft: #fbfcfa;
+  --accent: #0f766e;
+  --accent-dark: #0b5f59;
+  --accent-soft: #e3f2ee;
+  --code-bg: #eef3ef;
+  --shadow: 0 18px 48px rgba(23, 32, 27, 0.08);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background:
+    linear-gradient(90deg, rgba(15, 118, 110, 0.05) 0 1px, transparent 1px 100%),
+    linear-gradient(180deg, rgba(15, 118, 110, 0.04) 0 1px, transparent 1px 100%),
+    var(--paper);
+  background-size: 48px 48px;
+  color: var(--ink);
+  font-family: "Microsoft YaHei", "微软雅黑", "Noto Sans CJK SC", "PingFang SC", sans-serif;
+  font-size: 16px;
+  line-height: 1.78;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: 8px;
+  background: linear-gradient(90deg, var(--accent), #3b8c6e, #b08b2f);
+  z-index: 5;
+}
+.page-shell {
+  width: min(1180px, calc(100% - 48px));
+  margin: 56px auto 72px;
+}
+article {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  padding: clamp(28px, 5vw, 64px);
+  overflow-x: hidden;
+}
+h1, h2, h3, h4, h5, h6 {
+  color: var(--ink);
+  font-family: inherit;
+  font-weight: 700;
+  line-height: 1.32;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+h1 { margin: 0 0 14px; font-size: clamp(2rem, 4.8vw, 3.35rem); }
+h1 + p, h1 + p strong { color: var(--muted); font-size: clamp(1rem, 1.6vw, 1.18rem); }
+h2 { margin: 2.2em 0 0.75em; padding-top: 0.75em; border-top: 2px solid var(--accent); font-size: clamp(1.45rem, 2.4vw, 2rem); }
+h3 { margin: 1.8em 0 0.7em; font-size: clamp(1.18rem, 1.7vw, 1.42rem); }
+h4 { margin: 1.45em 0 0.55em; color: var(--accent-dark); font-size: 1.03rem; }
+h5 { margin: 1.2em 0 0.45em; color: var(--accent-dark); font-size: 0.98rem; }
+p { margin: 0.75em 0; }
+a { color: var(--accent-dark); text-decoration-thickness: 0.08em; text-underline-offset: 0.18em; }
+blockquote { margin: 24px 0; padding: 18px 20px; background: var(--panel-soft); border: 1px solid var(--soft-line); border-left: 5px solid var(--accent); }
+blockquote > p:first-child { margin-top: 0; color: var(--accent-dark); font-weight: 700; }
+ul, ol { padding-left: 1.35em; }
+li + li { margin-top: 0.28em; }
+code { padding: 0.12em 0.36em; border: 1px solid var(--soft-line); background: var(--code-bg); border-radius: 4px; color: #22312a; font-family: "Cascadia Mono", Consolas, "Liberation Mono", monospace; font-size: 0.92em; }
+pre { overflow-x: auto; padding: 16px 18px; background: #17201b; color: #eef5ef; border-radius: 6px; line-height: 1.62; }
+pre code { padding: 0; border: 0; background: transparent; color: inherit; }
+table { width: 100%; margin: 16px 0 24px; border-collapse: separate; border-spacing: 0; border: 1px solid var(--line); background: var(--panel); font-size: 0.93rem; line-height: 1.58; }
+thead th { position: sticky; top: 8px; z-index: 1; background: #eef5f1; color: #16362f; font-weight: 700; }
+th, td { min-width: 112px; padding: 10px 12px; border-right: 1px solid var(--soft-line); border-bottom: 1px solid var(--soft-line); vertical-align: top; text-align: left; }
+th:last-child, td:last-child { border-right: 0; }
+tr:last-child td { border-bottom: 0; }
+tbody tr:nth-child(even) { background: #fafbf8; }
+tbody tr:hover { background: var(--accent-soft); }
+.table-scroll { width: 100%; overflow-x: auto; margin: 16px 0 24px; border-radius: 8px; }
+.table-scroll table { margin: 0; min-width: 720px; }
+.report-footer { margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.86rem; }
+.toc-toggle { position: fixed; left: 0; top: 132px; z-index: 20; display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 88px; padding: 12px 10px; border: 1px solid var(--line); border-left: 0; border-radius: 0 8px 8px 0; background: var(--accent-dark); color: #fff; cursor: pointer; font-family: inherit; font-size: 0.92rem; font-weight: 700; writing-mode: vertical-rl; box-shadow: 0 12px 30px rgba(23, 32, 27, 0.14); }
+.toc-toggle:hover, .toc-toggle:focus-visible { background: var(--accent); outline: none; }
+.toc-drawer { position: fixed; inset: 0 auto 0 0; z-index: 30; width: min(360px, calc(100vw - 44px)); background: rgba(255,255,255,0.98); border-right: 1px solid var(--line); box-shadow: 18px 0 52px rgba(23, 32, 27, 0.18); transform: translateX(-102%); transition: transform 180ms ease; }
+.toc-drawer.is-open { transform: translateX(0); }
+.toc-drawer__inner { display: flex; flex-direction: column; height: 100%; padding: 22px 22px 18px; }
+.toc-drawer__header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.toc-drawer__title { margin: 0; color: var(--accent-dark); font-size: 1rem; font-weight: 700; }
+.toc-close { width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel-soft); color: var(--ink); cursor: pointer; font-family: inherit; font-size: 1.2rem; line-height: 1; }
+.toc-close:hover, .toc-close:focus-visible { border-color: var(--accent); outline: none; }
+.toc-drawer nav { overflow: auto; padding: 14px 2px 4px 0; }
+.toc-drawer ol { margin: 0; padding: 0; list-style: none; }
+.toc-drawer li { margin: 0; }
+.toc-drawer a { display: block; padding: 7px 8px; border-radius: 6px; color: var(--ink); text-decoration: none; line-height: 1.45; }
+.toc-drawer a:hover, .toc-drawer a:focus-visible { background: var(--accent-soft); color: var(--accent-dark); outline: none; }
+.toc-level-2 a { font-weight: 700; }
+.toc-level-3 a { padding-left: 22px; color: var(--muted); font-size: 0.92rem; }
+.toc-level-4 a { padding-left: 36px; color: var(--muted); font-size: 0.86rem; }
+.toc-scrim { position: fixed; inset: 0; z-index: 25; display: none; background: rgba(23, 32, 27, 0.24); }
+.toc-scrim.is-open { display: block; }
+@media (max-width: 760px) { body { font-size: 15px; } .page-shell { width: min(100% - 24px, 1180px); margin: 32px auto 40px; } article { padding: 24px 18px; } th, td { min-width: 150px; padding: 9px 10px; } }
+@media print { body { background: #fff; font-size: 10pt; } body::before, .toc-toggle, .toc-drawer, .toc-scrim { display: none !important; } .page-shell { width: 100%; margin: 0; } article { border: 0; box-shadow: none; padding: 0; } h2, h3, h4, thead { break-after: avoid; } table { break-inside: auto; font-size: 8.5pt; } tr { break-inside: avoid; } thead th { position: static; } }
+
   </style>
 </head>
 <body>
-  <main class="page">
-    <section class="hero">
-      <h1>代码映射数仓建模汇总</h1>
-      <p>从源绑定 DWD 明细层出发，经过双源校验，生成去来源信息的 DWS CFI 统一代码映射表。</p>
-      <p class="mono">项目目录：/home/dsou/code_mapping_jydb_datayes_ab/</p>
-    </section>
-
-    <section class="card full" style="margin-top:18px;">
-      <h2>一、建模链路</h2>
-      <div class="flow">
-        <div class="node"><b>DWD 源绑定明细层</b>聚源：dwd_gildata_range_year<br/>通联：dwd_datayes_range_year<br/>保留源内 ID，便于追溯。</div>
-        <div class="arrow">→</div>
-        <div class="node"><b>双源校验层</b>统一字段后按拉链键比对，差异保留在 validation 结果中。</div>
-        <div class="arrow">→</div>
-        <div class="node"><b>DWS CFI 统一层</b>dws_cfi_range_year<br/>去来源、去源内 ID，仅保留下游消费字段。</div>
+  <button class="toc-toggle" type="button" aria-controls="side-toc" aria-expanded="false">目录</button>
+  <div class="toc-scrim" data-toc-close></div>
+  <aside class="toc-drawer" id="side-toc" aria-label="侧边目录" aria-hidden="true">
+    <div class="toc-drawer__inner">
+      <div class="toc-drawer__header">
+        <p class="toc-drawer__title">目录</p>
+        <button class="toc-close" type="button" aria-label="关闭目录" data-toc-close>×</button>
       </div>
-    </section>
-
-    <section class="grid">
-      <div class="card">
-        <h2>二、源表构造简述</h2>
-        <p>聚源基于 <code>SecuMain + DZ_CodeChange + DZ_ListStatus</code> 构造代码拉链。</p>
-        <p>通联基于 <code>md_security + md_sec_chg + md_trade_cal</code> 构造同口径拉链，并将代码变更结束日转为右开区间边界。</p>
-      </div>
-
-      <div class="card">
-        <h2>三、区间语义</h2>
-        <p>所有拉链表统一采用：</p>
-        <p class="mono">[strart_date, stop_date)</p>
-        <ul>
-          <li><code>strart_date</code> 当天有效</li>
-          <li><code>stop_date</code> 当天不再有效</li>
-          <li><code>stop_date</code> 为空表示当前开口</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h2>四、子表拆分</h2>
-        <span class="pill">A股 / 沪深：a_share_secu_mapping_z</span>
-        <span class="pill">A股 / 北交：a_share_bjse_secu_mapping_z</span>
-        <span class="pill">B股 / 沪深：b_share_secu_mapping_z</span>
-        <p class="muted">类别和市场由表名表达，表内不再保留 exchange 字段。</p>
-      </div>
-    </section>
-
-    <section class="card full" style="margin-top:18px;">
-      <h2>五、DWD 源绑定明细层</h2>
-      <table>
-        <thead><tr><th>来源</th><th>测试库</th><th>字段</th><th>用途</th></tr></thead>
-        <tbody>
-          <tr>
-            <td>聚源 Gildata</td>
-            <td><code>dfs://user_dsou_dwd_gildata_range_year</code></td>
-            <td><code>cfi_prod_time, instrument, listed_date, delist_date, secucode, innercode, companycode, strart_date, stop_date</code></td>
-            <td>保留聚源交易代码、证券级 ID 和公司级 ID。</td>
-          </tr>
-          <tr>
-            <td>通联 Datayes</td>
-            <td><code>dfs://user_dsou_dwd_datayes_range_year</code></td>
-            <td><code>cfi_prod_time, instrument, listed_date, delist_date, ticker_symbol, security_id, party_id, strart_date, stop_date</code></td>
-            <td>保留通联交易代码、证券级 ID 和主体级 ID。</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section class="card full" style="margin-top:18px;">
-      <h2>六、DWS CFI 统一消费层</h2>
-      <p>目标测试库：<code>dfs://user_dsou_dws_cfi_range_year</code></p>
-      <p>统一字段：</p>
-      <p class="mono">cfi_prod_time, instrument, listed_date, delist_date, ticker, strart_date, stop_date</p>
-      <p>映射关系：</p>
-      <ul>
-        <li>聚源：<code>secucode → ticker</code>，去掉 <code>innercode/companycode</code></li>
-        <li>通联：<code>ticker_symbol → ticker</code>，去掉 <code>security_id/party_id</code></li>
-      </ul>
-      <p class="muted">当前 DWS CFI 默认使用通联明细层作为主源，聚源明细层用于校验和追溯。</p>
-    </section>
-
-    <section class="grid" style="margin-top:18px;">
-      <div class="card">
-        <h2>七、校验逻辑</h2>
-        <ul>
-          <li>字段完整性检查</li>
-          <li><code>strart_date</code> 非空</li>
-          <li><code>stop_date >= strart_date</code> 或为空</li>
-          <li>拉链行不重复</li>
-          <li>DDB 行数 = CSV 行数</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h2>八、双源校验</h2>
-        <p>两源统一后按以下键比对：</p>
-        <p class="mono">instrument + ticker + strart_date + stop_date</p>
-        <p>差异分为：<span class="pill">一致</span><span class="pill">聚源独有</span><span class="pill">通联独有</span></p>
-      </div>
-      <div class="card">
-        <h2>九、当前状态</h2>
-        <p><span class="ok">当前截面完全一致</span></p>
-        <p><span class="warn">历史拉链有少量差异</span>，保留在 validation 结果中，不进入 DWS 字段。</p>
-      </div>
-    </section>
-
-    <section class="card full" style="margin-top:18px;">
-      <h2>十、DWS CFI 写入结果</h2>
-      <table>
-        <thead><tr><th>表名</th><th>行数</th><th>instrument 数</th><th>ticker 数</th><th>空起点</th><th>负区间</th><th>开口区间</th></tr></thead>
-        <tbody>
-          <tr><td><code>a_share_secu_mapping_z</code></td><td>3897</td><td>3894</td><td>3895</td><td>0</td><td>0</td><td>3713</td></tr>
-          <tr><td><code>a_share_bjse_secu_mapping_z</code></td><td>571</td><td>323</td><td>571</td><td>0</td><td>0</td><td>319</td></tr>
-          <tr><td><code>b_share_secu_mapping_z</code></td><td>116</td><td>115</td><td>115</td><td>0</td><td>0</td><td>79</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section class="card full" style="margin-top:18px;">
-      <h2>十一、关键脚本</h2>
-      <table>
-        <thead><tr><th>脚本</th><th>说明</th></tr></thead>
-        <tbody>
-          <tr><td><code>build_split_mapping_tables.py</code></td><td>生成聚源/通联 DWD 源绑定拆分表。</td></tr>
-          <tr><td><code>write_split_mapping_to_ddb.py</code></td><td>写入 DWD 源绑定表到 DolphinDB。</td></tr>
-          <tr><td><code>build_dws_cfi_mapping.py</code></td><td>从通联 DWD 生成 DWS CFI 统一表。</td></tr>
-          <tr><td><code>write_dws_cfi_mapping_to_ddb.py</code></td><td>写入 DWS CFI 到 DolphinDB。</td></tr>
-        </tbody>
-      </table>
-    </section>
+      <nav aria-label="报告章节">
+        <ol id="side-toc-list"></ol>
+      </nav>
+    </div>
+  </aside>
+  <main class="page-shell">
+    <article>
+<h1 id="盘前涨跌停数据">盘前涨跌停数据</h1>
+<p><strong>数据调研报告</strong></p>
+<blockquote>
+<p>变更记录（按照日期倒序）</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>日期</th>
+<th>变更</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2026-06-10</td>
+<td>完成聚源/通联盘前涨跌停数据源调研、到达时间统计、一致性测试，并补充 DolphinDB 交易所盘前数据验证、推荐选源和待服务商确认问题清单。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="概述">1. 概述</h2>
+<h3 id="数据简介">1.1 数据简介</h3>
+<p>盘前涨跌停数据记录 A 股证券 T 日可申报的涨停价、跌停价。</p>
+<h3 id="应用场景">1.2 应用场景</h3>
+<p>主要用于盘前委托价格校验、T 日风控/股票池、回测撮合约束，以及涨跌停、封板/开板和触及次数研究。</p>
+<h3 id="数据盘点">1.3 数据盘点</h3>
+<h4 id="基本信息">1.3.1 基本信息</h4>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>数据供应商</th>
+<th>表</th>
+<th>覆盖对象</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>聚源 JYDB</td>
+<td><code>JYDB.SJQY_PriceLimitCalc</code></td>
+<td>A股股票</td>
+<td>提前计算表，正常日 T-1 下午可用</td>
+</tr>
+<tr class="even">
+<td>聚源 JYDB</td>
+<td><code>JYDB.DZ_PriceLimit</code></td>
+<td>A股股票</td>
+<td>最适合作为 T 日盘前最终交易参数</td>
+</tr>
+<tr class="odd">
+<td>通联 datayes</td>
+<td><code>datayes.mkt_limit</code></td>
+<td>沪深京AB股（本次对比口径）</td>
+<td>先经 <code>md_security</code> 主表筛选后用于备源校验和触及次数研究</td>
+</tr>
+<tr class="even">
+<td>DolphinDB交易所盘前数据</td>
+<td><code>sse_market_info</code> / <code>szse_snapshot</code> / <code>bse_security_status</code></td>
+<td>沪深京股票</td>
+<td>用于验证交易所盘前数据与聚源/通联最终价是否一致</td>
+</tr>
+</tbody>
+</table>
+<h4 id="比较分析">1.3.2 比较分析</h4>
+<p>本报告按交易所比较到达时间和价格一致性。统计起点统一为 2026-01-16；价格一致性统一采用 0.01 元容忍度。通联对比前先用 <code>md_security</code> 主表筛选沪深京 AB 股，再取 <code>mkt_limit</code>，因此不再把 ETF/基金等扩展资产纳入价格对比。</p>
+<h5 id="上交所xshg">上交所（XSHG）</h5>
+<table>
+<thead>
+<tr class="header">
+<th>对比项</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>聚源提前计算典型到达</td>
+<td>16:02:56，96 天交易日前可用</td>
+</tr>
+<tr class="even">
+<td>聚源最终参数典型到达</td>
+<td>08:40:39，95 天盘前全量可用</td>
+</tr>
+<tr class="odd">
+<td>通联 mkt_limit 典型到达</td>
+<td>08:12:24，93 天盘前全量可用</td>
+</tr>
+<tr class="even">
+<td>聚源AB股 vs 通联AB股</td>
+<td>共同记录 223239 条；聚源独有 0 条；通联独有 0 条</td>
+</tr>
+<tr class="odd">
+<td>0.01 元一致性</td>
+<td>一致 223147 条，不一致 92 条，一致率 99.9588%</td>
+</tr>
+</tbody>
+</table>
+<h5 id="深交所xshe">深交所（XSHE）</h5>
+<table>
+<thead>
+<tr class="header">
+<th>对比项</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>聚源提前计算典型到达</td>
+<td>16:02:56，96 天交易日前可用</td>
+</tr>
+<tr class="even">
+<td>聚源最终参数典型到达</td>
+<td>07:53:02，95 天盘前全量可用</td>
+</tr>
+<tr class="odd">
+<td>通联 mkt_limit 典型到达</td>
+<td>08:27:32，94 天盘前全量可用</td>
+</tr>
+<tr class="even">
+<td>聚源AB股 vs 通联AB股</td>
+<td>共同记录 277831 条；聚源独有 0 条；通联独有 0 条</td>
+</tr>
+<tr class="odd">
+<td>0.01 元一致性</td>
+<td>一致 277756 条，不一致 75 条，一致率 99.9730%</td>
+</tr>
+</tbody>
+</table>
+<h5 id="北交所xbei">北交所（XBEI）</h5>
+<table>
+<thead>
+<tr class="header">
+<th>对比项</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>聚源提前计算典型到达</td>
+<td>16:02:56，96 天交易日前可用</td>
+</tr>
+<tr class="even">
+<td>聚源最终参数典型到达</td>
+<td>08:43:17，95 天盘前全量可用</td>
+</tr>
+<tr class="odd">
+<td>通联 mkt_limit 典型到达</td>
+<td>08:34:47，95 天盘前全量可用</td>
+</tr>
+<tr class="even">
+<td>聚源AB股 vs 通联AB股</td>
+<td>共同记录 28810 条；聚源独有 0 条；通联独有 0 条</td>
+</tr>
+<tr class="odd">
+<td>0.01 元一致性</td>
+<td>一致 28777 条，不一致 33 条，一致率 99.8855%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="调研结论">1.4 调研结论</h3>
+<p>建议进入生产试用。推荐链路：T-1 用聚源 <code>SJQY_PriceLimitCalc</code> 预估；T 日盘前用聚源 <code>DZ_PriceLimit</code> 覆盖为最终交易参数；通联 <code>mkt_limit</code> 用于备源校验和触及次数研究；价格对比时先用 <code>md_security</code> 主表筛选沪深京 AB 股。</p>
+<p>待确认事项主要包括价格位舍入、触及次数口径、新股和特殊证券状态处理。通联 AB 股不一致主要来自无涨跌幅限制证券的占位表达。</p>
+<h2 id="聚源-jydb">2. 聚源 JYDB</h2>
+<h3 id="服务商简介">2.1 服务商简介</h3>
+<p>本次使用 <code>JYDB.SJQY_PriceLimitCalc</code> 和 <code>JYDB.DZ_PriceLimit</code>，分别对应提前计算和最终交易参数。</p>
+<h3 id="数据探查">2.2 数据探查</h3>
+<h4 id="数据简介-1">2.2.1 数据简介</h4>
+<p><code>SJQY_PriceLimitCalc</code> 提供前收、涨跌幅比例、涨跌停价和 Version；<code>DZ_PriceLimit</code> 提供前收、涨跌停价及申报数量/价格限制。</p>
+<h4 id="数据来源">2.2.2 数据来源</h4>
+<p>数据来源为交易所。</p>
+<h4 id="加工逻辑">2.2.3 加工逻辑</h4>
+<p><code>SJQY_PriceLimitCalc</code> 与 <code>DZ_PriceLimit</code> 的主要差异来自小数位/价格位处理：前者计算保留三位小数，后者保留两位小数；特殊证券规则仍需确认。</p>
+<h4 id="历史信息与增量更新">2.2.4 历史信息与增量更新</h4>
+<p>2026-01-16 起，<code>DZ_PriceLimit</code> 三市场 100% 盘前到达；<code>SJQY_PriceLimitCalc</code> 约 T-1 16:03 到达。</p>
+<h3 id="数据字典">2.3 数据字典</h3>
+<table>
+<thead>
+<tr class="header">
+<th>表</th>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>JYDB.SJQY_PriceLimitCalc</code></td>
+<td><code>TradingDay</code></td>
+<td>交易日</td>
+</tr>
+<tr class="even">
+<td><code>JYDB.SJQY_PriceLimitCalc</code></td>
+<td><code>PrevClosePrice</code></td>
+<td>前收盘价</td>
+</tr>
+<tr class="odd">
+<td><code>JYDB.SJQY_PriceLimitCalc</code></td>
+<td><code>SurgedLmtRate</code> / <code>DeclineLmtRate</code></td>
+<td>涨跌幅限制比例</td>
+</tr>
+<tr class="even">
+<td><code>JYDB.SJQY_PriceLimitCalc</code></td>
+<td><code>PriceCeiling</code> / <code>PriceFloor</code></td>
+<td>提前计算涨停价/跌停价</td>
+</tr>
+<tr class="odd">
+<td><code>JYDB.SJQY_PriceLimitCalc</code></td>
+<td><code>Version</code></td>
+<td>计算版本</td>
+</tr>
+<tr class="even">
+<td><code>JYDB.DZ_PriceLimit</code></td>
+<td><code>TradingDay</code></td>
+<td>交易日</td>
+</tr>
+<tr class="odd">
+<td><code>JYDB.DZ_PriceLimit</code></td>
+<td><code>PrevClosePrice</code></td>
+<td>前收盘价</td>
+</tr>
+<tr class="even">
+<td><code>JYDB.DZ_PriceLimit</code></td>
+<td><code>PriceCeiling</code> / <code>PriceFloor</code></td>
+<td>最终涨停价/跌停价</td>
+</tr>
+<tr class="odd">
+<td><code>JYDB.DZ_PriceLimit</code></td>
+<td><code>BuyNumUnit</code> / <code>SellNumUnit</code></td>
+<td>买卖数量单位</td>
+</tr>
+<tr class="even">
+<td><code>JYDB.DZ_PriceLimit</code></td>
+<td><code>LmtOrdMin</code> / <code>LmtOrdMax</code></td>
+<td>限价申报数量上下限</td>
+</tr>
+<tr class="odd">
+<td><code>JYDB.DZ_PriceLimit</code></td>
+<td><code>MktOrdMin</code> / <code>MktOrdMax</code></td>
+<td>市价申报数量上下限</td>
+</tr>
+<tr class="even">
+<td>两表</td>
+<td><code>sjqy_insert_time</code> / <code>sjqy_update_time</code></td>
+<td>本地入库/更新时间</td>
+</tr>
+</tbody>
+</table>
+<h3 id="point-in-time">2.4 Point-In-Time</h3>
+<h4 id="历史数据">2.4.1 历史数据</h4>
+<p><code>DZ_PriceLimit</code> 适合作为最终回测口径；<code>SJQY_PriceLimitCalc</code> 用于验证盘前预估链路。</p>
+<table>
+<thead>
+<tr class="header">
+<th>数据表</th>
+<th>历史数据覆盖起始日期</th>
+<th>服务商侧增量数据起始日期</th>
+<th>商务流程完成后增量传输起始日期</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>聚源 <code>JYDB.DZ_PriceLimit</code></td>
+<td>1990-12-19</td>
+<td>2021-03-11</td>
+<td>2024-01-03</td>
+</tr>
+<tr class="even">
+<td>聚源 <code>JYDB.SJQY_PriceLimitCalc</code></td>
+<td>2025-10-09</td>
+<td>2025-10-30</td>
+<td>2026-01-15</td>
+</tr>
+</tbody>
+</table>
+<h4 id="增量数据">2.4.2 增量数据</h4>
+<p>增量监控看 <code>sjqy_insert_time</code>：提前计算看 T-1 16:10，最终参数看 T 日 09:30。最晚到达时间：<code>SJQY_PriceLimitCalc</code> 为 16:06:40（T-1，对应 2026-06-12 交易日），<code>DZ_PriceLimit</code> 为 08:43:57（T 日）。</p>
+<h2 id="通联-datayes">3. 通联 datayes</h2>
+<h3 id="服务商简介-1">3.1 服务商简介</h3>
+<p>本次使用 <code>datayes.mkt_limit</code>，提供涨跌停价、前收和触及次数。</p>
+<h3 id="数据探查-1">3.2 数据探查</h3>
+<h4 id="数据简介-2">3.2.1 数据简介</h4>
+<p><code>mkt_limit</code> 以证券-交易日为粒度，核心字段为涨跌停价、前收、触及次数、更新时间和本地入库时间。</p>
+<h4 id="数据来源-1">3.2.2 数据来源</h4>
+<p>数据来源为交易所。</p>
+<h4 id="加工逻辑-1">3.2.3 加工逻辑</h4>
+<p>通联对无涨跌幅限制证券使用占位值表达涨跌停；触及次数和前收字段差异定义仍待确认。</p>
+<h4 id="历史信息与增量更新-1">3.2.4 历史信息与增量更新</h4>
+<p>2026-01-16 起，通联 XBEI 100%、XSHE 98.95%、XSHG 97.89% 盘前全量到达；少量晚到更像盘后修正。</p>
+<h3 id="数据字典-1">3.3 数据字典</h3>
+<table>
+<thead>
+<tr class="header">
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>TRADE_DATE</code></td>
+<td>交易日</td>
+</tr>
+<tr class="even">
+<td><code>EXCHANGE_CD</code></td>
+<td>交易所代码</td>
+</tr>
+<tr class="odd">
+<td><code>TICKER_SYMBOL</code></td>
+<td>证券代码</td>
+</tr>
+<tr class="even">
+<td><code>PRE_CLOSE_PRICE</code></td>
+<td>前收盘价</td>
+</tr>
+<tr class="odd">
+<td><code>ACT_PRE_CLOSE_PRICE</code></td>
+<td>实际前收盘价</td>
+</tr>
+<tr class="even">
+<td><code>LIMIT_UP_PRICE</code> / <code>LIMIT_DOWN_PRICE</code></td>
+<td>涨停价/跌停价</td>
+</tr>
+<tr class="odd">
+<td><code>UP_LIMIT_REACHED_TIMES</code> / <code>DOWN_LIMIT_REACHED_TIMES</code></td>
+<td>涨跌停触及次数</td>
+</tr>
+<tr class="even">
+<td><code>UPDATE_TIME</code></td>
+<td>通联侧更新时间</td>
+</tr>
+<tr class="odd">
+<td><code>sjqy_insert_time</code> / <code>sjqy_update_time</code></td>
+<td>本地入库/更新时间</td>
+</tr>
+</tbody>
+</table>
+<h3 id="point-in-time-1">3.4 Point-In-Time</h3>
+<h4 id="历史数据-1">3.4.1 历史数据</h4>
+<p><code>mkt_limit</code> 覆盖 2007-01-04 至 2026-06-11；到达时间统计主要使用 2026 年样本。</p>
+<table>
+<thead>
+<tr class="header">
+<th>数据表</th>
+<th>历史数据覆盖起始日期</th>
+<th>服务商侧增量数据起始日期</th>
+<th>商务流程完成后增量传输起始日期</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>通联 <code>datayes.mkt_limit</code></td>
+<td>2007-01-04</td>
+<td>2015-09-15</td>
+<td>2025-10-14</td>
+</tr>
+</tbody>
+</table>
+<h4 id="增量数据-1">3.4.2 增量数据</h4>
+<p>增量监控使用 <code>sjqy_insert_time</code>；<code>UPDATE_TIME</code> 仅辅助识别盘后修订。最晚到达时间：<code>mkt_limit</code> 为 08:37:09（XBEI，T 日）。</p>
+<h2 id="多源内容验证">4. 多源内容验证</h2>
+<p>本节按交易所展开一致性测试。通联侧先用 <code>md_security</code> 主表筛选沪深京 AB 股，再取 <code>mkt_limit</code> 与聚源 AB 股口径对比；价格一致性统一采用 0.01 元容忍度。DDB 仅统计共同证券-交易日。</p>
+<h3 id="校验机制说明">4.0 校验机制说明</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>校验层次</th>
+<th>对比对象</th>
+<th>校验目的</th>
+<th>口径说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>到达时间校验</td>
+<td>聚源提前计算、聚源最终参数、通联 mkt_limit</td>
+<td>判断 T 日 09:30 前是否可用</td>
+<td>按交易所和交易日取 <code>MAX(sjqy_insert_time)</code></td>
+</tr>
+<tr class="even">
+<td>盘前预估校验</td>
+<td>聚源提前计算 vs 聚源最终</td>
+<td>判断提前计算值是否能对上最终交易参数</td>
+<td>0.01 元容忍度</td>
+</tr>
+<tr class="odd">
+<td>双源最终价校验</td>
+<td>聚源 AB 股最终价 vs 通联 AB 股最终价</td>
+<td>判断服务商最终价是否一致</td>
+<td>通联先用 <code>md_security</code> 筛沪深京 AB 股；不纳入 ETF/基金</td>
+</tr>
+<tr class="even">
+<td>DDB盘前直连校验</td>
+<td>DDB盘前数据 vs 聚源/通联最终</td>
+<td>补充交易所盘前直连证据</td>
+<td>覆盖 2026-06-03 至 2026-06-10，仅看共同记录</td>
+</tr>
+</tbody>
+</table>
+<h3 id="聚源-ab-股-vs-通联-ab-股">4.1 聚源 AB 股 vs 通联 AB 股</h3>
+<table>
+<thead>
+<tr class="header">
+<th>交易所</th>
+<th>并集记录</th>
+<th>共同记录</th>
+<th>不一致数(0.01)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XBEI</td>
+<td>28810</td>
+<td>28810</td>
+<td>33</td>
+</tr>
+<tr class="even">
+<td>XSHE</td>
+<td>277831</td>
+<td>277831</td>
+<td>75</td>
+</tr>
+<tr class="odd">
+<td>XSHG</td>
+<td>223239</td>
+<td>223239</td>
+<td>92</td>
+</tr>
+</tbody>
+</table>
+<p>筛选后共同记录覆盖完全对齐；剩余 200 行不一致主要来自通联对无涨跌幅限制证券的占位表达。</p>
+<h3 id="dolphindb-交易所盘前数据验证">4.2 DolphinDB 交易所盘前数据验证</h3>
+<p>DDB 使用 <code>dfs://cfi_a_share_high_frequency</code>：上交所 <code>sse_market_info</code>，深交所 <code>szse_snapshot</code>，北交所 <code>bse_security_status</code>。DDB 仅覆盖近期窗口，作为盘前直连校验和异常定位证据。</p>
+<p>覆盖范围：</p>
+<table>
+<thead>
+<tr class="header">
+<th>交易所</th>
+<th>最早日期</th>
+<th>最新日期</th>
+<th>记录数</th>
+<th>交易日数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XBEI</td>
+<td>2026-06-03</td>
+<td>2026-06-10</td>
+<td>1914</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td>XSHE</td>
+<td>2026-06-03</td>
+<td>2026-06-10</td>
+<td>17354</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td>XSHG</td>
+<td>2026-06-03</td>
+<td>2026-06-10</td>
+<td>13889</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p>DDB 不一致明细：</p>
+<h4 id="ddb-盘前-vs-聚源最终ddb-有值聚源为空">DDB 盘前 vs 聚源最终：DDB 有值，聚源为空</h4>
+<table>
+<thead>
+<tr class="header">
+<th>交易所</th>
+<th>交易日</th>
+<th>证券代码</th>
+<th>DDB涨停价</th>
+<th>聚源涨停价</th>
+<th>DDB跌停价</th>
+<th>聚源跌停价</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XBEI</td>
+<td>2026-06-05</td>
+<td>920211</td>
+<td>99999.99</td>
+<td>空</td>
+<td>0.00</td>
+<td>空</td>
+</tr>
+<tr class="even">
+<td>XBEI</td>
+<td>2026-06-08</td>
+<td>920206</td>
+<td>99999.99</td>
+<td>空</td>
+<td>0.00</td>
+<td>空</td>
+</tr>
+<tr class="odd">
+<td>XBEI</td>
+<td>2026-06-08</td>
+<td>920206</td>
+<td>99999.99</td>
+<td>空</td>
+<td>0.00</td>
+<td>空</td>
+</tr>
+<tr class="even">
+<td>XBEI</td>
+<td>2026-06-08</td>
+<td>920206</td>
+<td>99999.99</td>
+<td>空</td>
+<td>0.00</td>
+<td>空</td>
+</tr>
+<tr class="odd">
+<td>XSHE</td>
+<td>2026-06-09</td>
+<td>301669</td>
+<td>999999999.99</td>
+<td>空</td>
+<td>0.01</td>
+<td>空</td>
+</tr>
+<tr class="even">
+<td>XSHE</td>
+<td>2026-06-10</td>
+<td>301669</td>
+<td>999999999.99</td>
+<td>空</td>
+<td>0.01</td>
+<td>空</td>
+</tr>
+<tr class="odd">
+<td>XSHG</td>
+<td>2026-06-08</td>
+<td>600193</td>
+<td>2.39</td>
+<td>空</td>
+<td>1.95</td>
+<td>空</td>
+</tr>
+<tr class="even">
+<td>XSHG</td>
+<td>2026-06-08</td>
+<td>600608</td>
+<td>2.28</td>
+<td>空</td>
+<td>1.86</td>
+<td>空</td>
+</tr>
+<tr class="odd">
+<td>XSHG</td>
+<td>2026-06-08</td>
+<td>605081</td>
+<td>5.53</td>
+<td>空</td>
+<td>4.53</td>
+<td>空</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ddb-盘前-vs-通联哨兵值或特殊值口径不一致">DDB 盘前 vs 通联：哨兵值或特殊值口径不一致</h4>
+<table>
+<thead>
+<tr class="header">
+<th>交易所</th>
+<th>交易日</th>
+<th>证券代码</th>
+<th>DDB涨停价</th>
+<th>通联涨停价</th>
+<th>涨停差异</th>
+<th>DDB跌停价</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XSHE</td>
+<td>2026-06-09</td>
+<td>301669</td>
+<td>999999999.99</td>
+<td>999999.999</td>
+<td>999000000.00</td>
+<td>0.01</td>
+</tr>
+<tr class="even">
+<td>XSHE</td>
+<td>2026-06-10</td>
+<td>301669</td>
+<td>999999999.99</td>
+<td>999999.999</td>
+<td>999000000.00</td>
+<td>0.01</td>
+</tr>
+<tr class="odd">
+<td>XSHG</td>
+<td>2026-06-08</td>
+<td>600193</td>
+<td>2.39</td>
+<td>99999.999</td>
+<td>-99997.61</td>
+<td>1.95</td>
+</tr>
+<tr class="even">
+<td>XSHG</td>
+<td>2026-06-08</td>
+<td>600608</td>
+<td>2.28</td>
+<td>99999.999</td>
+<td>-99997.72</td>
+<td>1.86</td>
+</tr>
+<tr class="odd">
+<td>XSHG</td>
+<td>2026-06-08</td>
+<td>605081</td>
+<td>5.53</td>
+<td>99999.999</td>
+<td>-99994.47</td>
+<td>4.53</td>
+</tr>
+</tbody>
+</table>
+<h2 id="待确认问题与后续动作">5. 待确认问题与后续动作</h2>
+<h3 id="待服务商确认问题">5.1 待服务商确认问题</h3>
+<p>待确认问题见 <code>服务商待询问问题.md</code>，重点包括价格位舍入、Version、触及次数和前收字段定义；通联无涨跌幅限制占位值已按当前确认口径解释。</p>
+<h3 id="后续动作">5.2 后续动作</h3>
+<ol type="1">
+<li>向聚源确认 <code>SJQY_PriceLimitCalc</code> 与 <code>DZ_PriceLimit</code> 的价格位和特殊场景处理规则。</li>
+<li>向通联确认触及次数、前收字段和盘后更新时间语义；无涨跌幅限制占位值按已确认口径处理。</li>
+<li>在服务商确认后，将规则固化到 DWD/DWS 生产规格与监控规则中。</li>
+</ol>
+</article>
   </main>
+  <script>
+
+(() => {
+  const toggle = document.querySelector(".toc-toggle");
+  const drawer = document.querySelector(".toc-drawer");
+  const scrim = document.querySelector(".toc-scrim");
+  const list = document.querySelector("#side-toc-list");
+  const headings = Array.from(document.querySelectorAll("article h2, article h3, article h4"));
+
+  document.querySelectorAll("article table").forEach((table) => {
+    if (!table.parentElement.classList.contains("table-scroll")) {
+      const wrap = document.createElement("div");
+      wrap.className = "table-scroll";
+      table.parentNode.insertBefore(wrap, table);
+      wrap.appendChild(table);
+    }
+  });
+
+  headings.forEach((heading) => {
+    if (!heading.id) {
+      heading.id = heading.textContent.trim().toLowerCase().replace(/\s+/g, "-");
+    }
+    const item = document.createElement("li");
+    const level = Math.min(Math.max(Number(heading.tagName.slice(1)), 2), 4);
+    item.className = `toc-level-${level}`;
+    const link = document.createElement("a");
+    link.href = `#${encodeURIComponent(heading.id)}`;
+    link.textContent = heading.textContent.trim();
+    link.addEventListener("click", () => closeToc());
+    item.append(link);
+    list.append(item);
+  });
+
+  function openToc() {
+    drawer.classList.add("is-open");
+    scrim.classList.add("is-open");
+    drawer.setAttribute("aria-hidden", "false");
+    toggle.setAttribute("aria-expanded", "true");
+    drawer.querySelector("a, button")?.focus();
+  }
+
+  function closeToc() {
+    drawer.classList.remove("is-open");
+    scrim.classList.remove("is-open");
+    drawer.setAttribute("aria-hidden", "true");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+
+  toggle.addEventListener("click", () => {
+    drawer.classList.contains("is-open") ? closeToc() : openToc();
+  });
+  document.querySelectorAll("[data-toc-close]").forEach((el) => el.addEventListener("click", closeToc));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeToc();
+  });
+})();
+
+  </script>
 </body>
 </html>
