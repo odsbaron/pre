@@ -466,7 +466,7 @@ tbody tr:hover { background: var(--accent-soft); }
 <p>略</p>
 <h3 id="数据探查">2.2 数据探查</h3>
 <h4 id="数据简介-1">2.2.1 数据简介</h4>
-<p><code>SJQY_PriceLimitCalc</code> 提供前收、涨跌幅比例、涨跌停价和 Version；<code>DZ_PriceLimit</code> 提供前收、涨跌停价及申报数量/价格限制。</p>
+<p><code>SJQY_PriceLimitCalc</code> 用于盘前预估，<code>DZ_PriceLimit</code> 用于最终交易参数。</p>
 <h4 id="数据来源">2.2.2 数据来源</h4>
 <p>数据来源为交易所。</p>
 <h4 id="加工逻辑">2.2.3 加工逻辑</h4>
@@ -579,7 +579,7 @@ tbody tr:hover { background: var(--accent-soft); }
 <p>略</p>
 <h3 id="数据探查-1">3.2 数据探查</h3>
 <h4 id="数据简介-2">3.2.1 数据简介</h4>
-<p><code>mkt_limit</code> 以证券-交易日为粒度，核心字段为涨跌停价、前收、触及次数、更新时间和本地入库时间。</p>
+<p><code>mkt_limit</code> 主键为证券代码和交易日，用于记录通联涨跌停信息。</p>
 <h4 id="数据来源-1">3.2.2 数据来源</h4>
 <p>数据来源为交易所。</p>
 <h4 id="加工逻辑-1">3.2.3 加工逻辑</h4>
@@ -727,6 +727,7 @@ tbody tr:hover { background: var(--accent-soft); }
   </script>
 </body>
 </html>
+
 
 
 
