@@ -655,7 +655,7 @@ tbody tr:hover { background: var(--accent-soft); }
 </tbody>
 </table>
 <h4 id="增量数据-1">3.4.2 增量数据</h4>
-<p>增量监控使用 <code>sjqy_insert_time</code>；<code>UPDATE_TIME</code> 仅辅助识别盘后修订。最晚到达时间：<code>mkt_limit</code> 为 08:37:09（XBEI，T 日）。</p>
+<p>增量数据使用 <code>sjqy_insert_time</code> 判断到达时点；<code>UPDATE_TIME</code> 仅辅助识别盘后修订。常规盘前最晚到达时间为 08:37:09（XBEI，T 日）；另有部分数据晚于盘前插入，异常明细见 <code>通联插入时间_晚于盘前.csv</code>，最晚插入时间为 15:16:41。</p>
 <h2 id="待确认问题与后续动作">4. 待确认问题与后续动作</h2>
 <h3 id="待服务商确认问题">4.1 待服务商确认问题</h3>
 <p>待确认问题见 <code>服务商待询问问题.md</code>，重点包括价格位舍入、Version、触及次数和前收字段定义；通联无涨跌幅限制占位值已按当前确认口径解释。</p>
@@ -727,6 +727,7 @@ tbody tr:hover { background: var(--accent-soft); }
   </script>
 </body>
 </html>
+
 
 
 
