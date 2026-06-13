@@ -1,0 +1,2028 @@
+{
+  "operators": [
+    {
+      "category": "arithmetic",
+      "description": "Absolute value.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_a2a_abs",
+      "llm_visible": true,
+      "name": "abs",
+      "output_type": "Vector",
+      "raw_signature": "a2a",
+      "tier": "core"
+    },
+    {
+      "category": "arithmetic",
+      "description": "Vector addition.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series_2",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_aa2a_add",
+      "llm_visible": true,
+      "name": "add",
+      "output_type": "Vector",
+      "raw_signature": "aa2a",
+      "tier": "core"
+    },
+    {
+      "category": "cross_section",
+      "description": "Cross-sectional de-mean.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_a2a_centralize",
+      "llm_visible": true,
+      "name": "demean",
+      "output_type": "Vector",
+      "raw_signature": "a2a",
+      "tier": "core"
+    },
+    {
+      "category": "arithmetic",
+      "description": "Safe vector division.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series_2",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_aa2a_div",
+      "llm_visible": true,
+      "name": "div",
+      "output_type": "Vector",
+      "raw_signature": "aa2a",
+      "tier": "core"
+    },
+    {
+      "category": "arithmetic",
+      "description": "Safe log wrapper boundary.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_a2a_log",
+      "llm_visible": true,
+      "name": "log",
+      "output_type": "Vector",
+      "raw_signature": "a2a",
+      "tier": "core"
+    },
+    {
+      "category": "returns",
+      "description": "Trailing log return.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_mtr",
+      "llm_visible": true,
+      "name": "log_return",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "stable"
+    },
+    {
+      "category": "arithmetic",
+      "description": "Vector multiplication.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series_2",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_aa2a_mul",
+      "llm_visible": true,
+      "name": "mul",
+      "output_type": "Vector",
+      "raw_signature": "aa2a",
+      "tier": "core"
+    },
+    {
+      "category": "arithmetic",
+      "description": "Negate a vector.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_a2a_neg",
+      "llm_visible": true,
+      "name": "neg",
+      "output_type": "Vector",
+      "raw_signature": "a2a",
+      "tier": "core"
+    },
+    {
+      "category": "nonlinear",
+      "description": "Negative part.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_a2a_negpart",
+      "llm_visible": true,
+      "name": "negative_part",
+      "output_type": "Vector",
+      "raw_signature": "a2a",
+      "tier": "stable"
+    },
+    {
+      "category": "arithmetic",
+      "description": "Ratio minus one.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series_2",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_aa2a_pct",
+      "llm_visible": true,
+      "name": "pct",
+      "output_type": "Vector",
+      "raw_signature": "aa2a",
+      "tier": "core"
+    },
+    {
+      "category": "returns",
+      "description": "Trailing percent change.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_pct",
+      "llm_visible": true,
+      "name": "pct_change",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "core"
+    },
+    {
+      "category": "nonlinear",
+      "description": "Positive part.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_a2a_pospart",
+      "llm_visible": true,
+      "name": "positive_part",
+      "output_type": "Vector",
+      "raw_signature": "a2a",
+      "tier": "stable"
+    },
+    {
+      "category": "cross_section",
+      "description": "Cross-sectional rank.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_a2a_rank",
+      "llm_visible": true,
+      "name": "rank",
+      "output_type": "Vector",
+      "raw_signature": "a2a",
+      "tier": "core"
+    },
+    {
+      "category": "cross_section",
+      "description": "Difference of ranks.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series_2",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_aa2a_ranksub",
+      "llm_visible": true,
+      "name": "rank_sub",
+      "output_type": "Vector",
+      "raw_signature": "aa2a",
+      "tier": "stable"
+    },
+    {
+      "category": "regression",
+      "description": "Cross-sectional residual.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series_2",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_aa2a_regresid",
+      "llm_visible": false,
+      "name": "regression_residual",
+      "output_type": "Vector",
+      "raw_signature": "aa2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "arithmetic",
+      "description": "Sign of values.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_a2a_sign",
+      "llm_visible": true,
+      "name": "sign",
+      "output_type": "Vector",
+      "raw_signature": "a2a",
+      "tier": "core"
+    },
+    {
+      "category": "arithmetic",
+      "description": "Square a vector.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_a2a_square",
+      "llm_visible": true,
+      "name": "square",
+      "output_type": "Vector",
+      "raw_signature": "a2a",
+      "tier": "core"
+    },
+    {
+      "category": "arithmetic",
+      "description": "Vector subtraction.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series_2",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_aa2a_sub",
+      "llm_visible": true,
+      "name": "sub",
+      "output_type": "Vector",
+      "raw_signature": "aa2a",
+      "tier": "core"
+    },
+    {
+      "category": "trend",
+      "description": "Trailing time slope.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_autoslope",
+      "llm_visible": true,
+      "name": "ts_autoslope",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "stable"
+    },
+    {
+      "category": "relationship",
+      "description": "Slope to market vector.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_baf2a_botrowsv_slope",
+      "llm_visible": false,
+      "name": "ts_beta_to",
+      "output_type": "Vector",
+      "raw_signature": "baf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "relationship",
+      "description": "Market-weighted center exposure.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_baf2a_botrowsv_center",
+      "llm_visible": false,
+      "name": "ts_center_to_market",
+      "output_type": "Vector",
+      "raw_signature": "baf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "relationship",
+      "description": "Conditioned lagged window correlation.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "param_2",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "param_3",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbfff2a_botrowsv_condlagcorr",
+      "llm_visible": false,
+      "name": "ts_cond_lagcorr",
+      "output_type": "Vector",
+      "raw_signature": "bbfff2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "relationship",
+      "description": "Trailing correlation.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_botrowsv_corr",
+      "llm_visible": true,
+      "name": "ts_corr",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "core"
+    },
+    {
+      "category": "relationship",
+      "description": "Coskewness to market vector.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_baf2a_botrowsv_coskew",
+      "llm_visible": false,
+      "name": "ts_coskew_to_market",
+      "output_type": "Vector",
+      "raw_signature": "baf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "path",
+      "description": "Negative observation count.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_countneg",
+      "llm_visible": true,
+      "name": "ts_count_negative",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "stable"
+    },
+    {
+      "category": "path",
+      "description": "Positive observation count.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_countpos",
+      "llm_visible": true,
+      "name": "ts_count_positive",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "stable"
+    },
+    {
+      "category": "relationship",
+      "description": "Covariance to market vector.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_baf2a_botrowsv_cov",
+      "llm_visible": false,
+      "name": "ts_cov_to_market",
+      "output_type": "Vector",
+      "raw_signature": "baf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "relationship",
+      "description": "Mean of pairwise ratio.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_botrowsv_divmean",
+      "llm_visible": false,
+      "name": "ts_div_mean",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "relationship",
+      "description": "Dual-conditioned lagged window correlation.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "param_2",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "param_3",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "param_4",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbffff2a_botrowsv_dualcondlagcorr",
+      "llm_visible": false,
+      "name": "ts_dual_cond_lagcorr",
+      "output_type": "Vector",
+      "raw_signature": "bbffff2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "relationship",
+      "description": "Windowed pairwise dot product.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_botrowsv_einsum",
+      "llm_visible": false,
+      "name": "ts_einsum",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "distribution",
+      "description": "Window entropy.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_hentropy",
+      "llm_visible": false,
+      "name": "ts_entropy",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "distribution",
+      "description": "Trailing kurtosis.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_kurt",
+      "llm_visible": true,
+      "name": "ts_kurt",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "stable"
+    },
+    {
+      "category": "relationship",
+      "description": "Lagged window correlation.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "param_2",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbff2a_botrowsv_lagcorr",
+      "llm_visible": false,
+      "name": "ts_lagcorr",
+      "output_type": "Vector",
+      "raw_signature": "bbff2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "relationship",
+      "description": "Lower-side covariance to market vector.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_baf2a_botrowsv_lcov",
+      "llm_visible": false,
+      "name": "ts_lcov_to_market",
+      "output_type": "Vector",
+      "raw_signature": "baf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "relationship",
+      "description": "Windowed relative log ratio.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_botrowsv_mtr",
+      "llm_visible": false,
+      "name": "ts_log_ratio_to",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "time_series",
+      "description": "Trailing window max.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_max",
+      "llm_visible": true,
+      "name": "ts_max",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "core"
+    },
+    {
+      "category": "time_series",
+      "description": "Trailing window mean.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_mean",
+      "llm_visible": true,
+      "name": "ts_mean",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "core"
+    },
+    {
+      "category": "path",
+      "description": "Pair-conditioned negative mean.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_botrowsv_meanifneg",
+      "llm_visible": false,
+      "name": "ts_mean_if_negative_pair",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "path",
+      "description": "Pair-conditioned positive mean.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_botrowsv_meanifpos",
+      "llm_visible": false,
+      "name": "ts_mean_if_positive_pair",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "time_series",
+      "description": "Trailing window min.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_min",
+      "llm_visible": true,
+      "name": "ts_min",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "core"
+    },
+    {
+      "category": "relationship",
+      "description": "Windowed relative momentum.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_botrowsv_mtm",
+      "llm_visible": false,
+      "name": "ts_momentum_to",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "relationship",
+      "description": "Windowed relative percent change.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_botrowsv_pct",
+      "llm_visible": false,
+      "name": "ts_pct_to",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "relationship",
+      "description": "Trailing rank correlation.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_botrowsv_rankic",
+      "llm_visible": false,
+      "name": "ts_rank_ic",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "returns",
+      "description": "Current over lagged value.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_div",
+      "llm_visible": true,
+      "name": "ts_ratio",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "core"
+    },
+    {
+      "category": "relationship",
+      "description": "Signed co-movement dot product.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "param_2",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_baff2a_botrowsv_signeddot",
+      "llm_visible": false,
+      "name": "ts_signed_dot_to_market",
+      "output_type": "Vector",
+      "raw_signature": "baff2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "distribution",
+      "description": "Trailing skewness.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_skew",
+      "llm_visible": true,
+      "name": "ts_skew",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "stable"
+    },
+    {
+      "category": "time_series",
+      "description": "Trailing window std.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_std",
+      "llm_visible": true,
+      "name": "ts_std",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "core"
+    },
+    {
+      "category": "time_series",
+      "description": "Trailing window sum.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_sum",
+      "llm_visible": true,
+      "name": "ts_sum",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "core"
+    },
+    {
+      "category": "path",
+      "description": "Pair-conditioned negative sum.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_botrowsv_sumifneg",
+      "llm_visible": false,
+      "name": "ts_sum_if_negative_pair",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "path",
+      "description": "Pair-conditioned positive sum.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_botrowsv_sumifpos",
+      "llm_visible": false,
+      "name": "ts_sum_if_positive_pair",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "path",
+      "description": "Negative observation sum.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_sumifneg",
+      "llm_visible": true,
+      "name": "ts_sum_negative",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "stable"
+    },
+    {
+      "category": "path",
+      "description": "Positive observation sum.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_sumifpos",
+      "llm_visible": true,
+      "name": "ts_sum_positive",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "stable"
+    },
+    {
+      "category": "distribution",
+      "description": "Top-quantile conditional skew.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "param_2",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbff2a_botrowsv_topqskew",
+      "llm_visible": false,
+      "name": "ts_topq_skew",
+      "output_type": "Vector",
+      "raw_signature": "bbff2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "time_series",
+      "description": "Trailing window variance.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_var",
+      "llm_visible": true,
+      "name": "ts_var",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "core"
+    },
+    {
+      "category": "time_series",
+      "description": "Volume reweighted window mean.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_ewmean",
+      "llm_visible": false,
+      "name": "ts_volume_reweighted_mean",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "time_series",
+      "description": "Trailing weighted mean.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_autowmean",
+      "llm_visible": true,
+      "name": "ts_weighted_mean",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "stable"
+    },
+    {
+      "category": "distribution",
+      "description": "Weighted window skew.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window_2",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bbf2a_wskew",
+      "llm_visible": false,
+      "name": "ts_weighted_skew",
+      "output_type": "Vector",
+      "raw_signature": "bbf2a",
+      "tier": "experimental"
+    },
+    {
+      "category": "path",
+      "description": "Zero rate in trailing window.",
+      "inputs": [
+        {
+          "constraints": [
+            "2d",
+            "trailing_only",
+            "asset_columns"
+          ],
+          "name": "window",
+          "role": "time_series_panel",
+          "type": "WindowMatrix"
+        },
+        {
+          "constraints": [
+            "literal",
+            "compiler_validated"
+          ],
+          "name": "window",
+          "role": "numeric_parameter",
+          "type": "ScalarParam"
+        }
+      ],
+      "kernel_name": "op_bf2a_botrowsv_zerorate",
+      "llm_visible": true,
+      "name": "ts_zero_rate",
+      "output_type": "Vector",
+      "raw_signature": "bf2a",
+      "tier": "stable"
+    },
+    {
+      "category": "cross_section",
+      "description": "Cross-sectional z-score.",
+      "inputs": [
+        {
+          "constraints": [
+            "1d",
+            "finite_or_nan"
+          ],
+          "name": "series",
+          "role": "cross_section_or_market_series",
+          "type": "Vector"
+        }
+      ],
+      "kernel_name": "op_a2a_zscorize",
+      "llm_visible": true,
+      "name": "zscore",
+      "output_type": "Vector",
+      "raw_signature": "a2a",
+      "tier": "core"
+    }
+  ],
+  "operators_path": "/Users/dsou/Desktop/agent-factor-mining-frameworks/tools/operators.py",
+  "summary": {
+    "experimental": 24,
+    "llm_visible": 35,
+    "total": 59
+  }
+}
